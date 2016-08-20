@@ -91,3 +91,15 @@ The data was subsetted so that only mean and standard deviation values were incl
 Finally the data was grouped based on activity and subject and within these categories a mean value was computed.
 
 ## Data Transformations
+The transformations used to generate this dataset can be found in the script run_analysis.R. It is organized into to functions, 1) processData() and 2) createBaseTable. The second function is called by the first with the primary purpose of reducing code duplication in the main processData() function.
+
+The basic flow of the transformations are as follows:
+* Read meta data for both sets
+* Read data and tidy the test dataset
+* Read data and tidy the training dataset
+* Merge datasets
+* Process and write data to creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+* Add descriptive column names
+* Write data to file
+
+For further details see "run_analysis.R".

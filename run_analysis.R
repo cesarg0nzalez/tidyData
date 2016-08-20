@@ -4,14 +4,14 @@ processData <- function() {
   features <- read.table("./UCI HAR Dataset/features.txt")
   activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt")
   
-  # Read read and tidy test data
+  # Read data and tidy the test dataset
   data <- read.table("./UCI HAR Dataset/test/X_test.txt", sep = "")
   activity <- read.table("./UCI HAR Dataset/test/Y_test.txt", sep = "")
   subject <- read.table("./UCI HAR Dataset/test/Subject_test.txt", sep = "")
   
   testData <- createBaseTable(features, activity_labels, subject, activity, data)
   
-  # Read and tidy training data
+  # Read data and tidy the training dataset
   data <- read.table("./UCI HAR Dataset/train/X_train.txt", sep = "")
   activity <- read.table("./UCI HAR Dataset/train/Y_train.txt", sep = "")
   subject <- read.table("./UCI HAR Dataset/train/Subject_train.txt", sep = "")
@@ -22,8 +22,8 @@ processData <- function() {
   data <- rbind(trainData, testData)
   
   # Process and write data to creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-  groupedData <- aggregate(testData[,3:68], 
-                           by= list(testData$id, testData$activity), 
+  groupedData <- aggregate(data[,3:68], 
+                           by= list(data$id, data$activity), 
                            FUN = mean)
 
   # Add descriptive column names
@@ -31,9 +31,9 @@ processData <- function() {
   colnames(groupedData)[2] <- "Activity"
   
   # Write data to file
-  write.table(groupData, "UCI-HAT-Summary.csv", row.names = F)
+  write.table(groupedData, "UCI-HAT-Summary.txt", row.names = F)
   
-  groupData
+  groupedData
 }
 
 createBaseTable <- function(features, activity_labels, subject, activity, data) {
