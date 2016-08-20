@@ -34,6 +34,7 @@ processData <- function() {
   write.table(groupedData, "UCI-HAT-Summary.txt", row.names = F)
   
   groupedData
+  
 }
 
 createBaseTable <- function(features, activity_labels, subject, activity, data) {
