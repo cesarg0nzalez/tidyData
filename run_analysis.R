@@ -1,17 +1,33 @@
-loadData <- function(path) {
-  data <- read.table("./UCI HAR Dataset/test/X_test.txt", sep = "")
+loaddata <- function() {
+  
   features <- read.table("./UCI HAR Dataset/features.txt")
-  activity <- read.table("./UCI HAR Dataset/test/Y_test.txt", sep = "")
-  subject <- read.table("./UCI HAR Dataset/test/Subject_test.txt", sep = "")
   activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt")
   
-  features <- as.vector(features$V2)
-  data <- cbind(subject, activity, data)
-  colnames(data) <- c("id", "activity", features)
+  data <- read.table("./UCI HAR Dataset/test/X_test.txt", sep = "")
+  activity <- read.table("./UCI HAR Dataset/test/Y_test.txt", sep = "")
+  subject <- read.table("./UCI HAR Dataset/test/Subject_test.txt", sep = "")
   
-  data$activity <- factor(data$activity, 
-                          levels = as.vector(activity_labels$V1), 
-                          labels = as.vector(activity_labels$V2))
-  data <- subset(data, select = grep("mean()|std()", names(data)))
+  testData <- createBaseTable(features, activity_labels, subject, activity, data)
+  
+  data <- read.table("./UCI HAR Dataset/train/X_train.txt", sep = "")
+  activity <- read.table("./UCI HAR Dataset/train/Y_train.txt", sep = "")
+  subject <- read.table("./UCI HAR Dataset/train/Subject_train.txt", sep = "")
+  
+  trainData <- createBaseTable(features, activity_labels, subject, activity, data)
+  
+  data <- rbind(trainData, testData)
   data
+}
+
+createBaseTable <- function(features, activity_labels, subject, activity, data) {
+  
+  tbl <- cbind(subject, activity, data)
+  features <- as.vector(features$V2)
+  colnames(tbl) <- c("id", "activity", features)
+  tbl <- subset(tbl, select = grep("^id|^activity|mean\\(\\)|std\\(\\)", names(tbl)))
+  
+  tbl$activity <- factor(tbl$activity, 
+                         levels = as.vector(activity_labels$V1), 
+                         labels = as.vector(activity_labels$V2))
+  tbl
 }
